@@ -53,7 +53,7 @@ const plugin = {
     // @todo If you can think of a better way of getting process stats,
     // then please feel free to send me a pull request. This is version 0.1
     // and needs some love.
-    childProcess.exec('ps -ewwwo %cpu,%mem,comm', (error, stdout, stderr) => {
+    childProcess.exec('ps -ewwwo %cpu,%mem,args | awk \'{ if ($3 ~ /^\\//) sub(/^.+\\//, "", $3); else if ($3 ~ /^\\[/) gsub(/\\[|\\]|\\/.+$/, "", $3); print($1, $2, $3) }\'', (error, stdout, stderr) => {
       if (error) {
         console.error(error)
       }
